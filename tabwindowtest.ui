@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Puddin</class>
+ <widget class="QDialog" name="Puddin">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>780</width>
+    <height>431</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Puddin'</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_5">
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_5">
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout_4">
+         <item>
+          <widget class="QLabel" name="label_3">
+           <property name="font">
+            <font>
+             <family>Monaco</family>
+             <pointsize>18</pointsize>
+            </font>
+           </property>
+           <property name="text">
+            <string>Puddin':</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout_3">
+         <item>
+          <widget class="QLabel" name="label_4">
+           <property name="font">
+            <font>
+             <family>Monaco</family>
+             <pointsize>10</pointsize>
+             <italic>false</italic>
+            </font>
+           </property>
+           <property name="text">
+            <string>the copy machine</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_4">
+       <item>
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>Number of Projects</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QSpinBox" name="spinBox">
+         <property name="minimum">
+          <number>1</number>
+         </property>
+         <property name="maximum">
+          <number>6</number>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QSplitter" name="splitter_2">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <widget class="QSplitter" name="splitter">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <widget class="QWidget" name="layoutWidget">
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <property name="spacing">
+         <number>1</number>
+        </property>
+        <item>
+         <widget class="QLabel" name="label">
+          <property name="text">
+           <string>Copy file from...</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QTreeView" name="treeView"/>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QTabWidget" name="tabWidget"/>
+     </widget>
+     <widget class="QWidget" name="layoutWidget">
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <widget class="QPlainTextEdit" name="plainTextEdit">
+         <property name="palette">
+          <palette>
+           <active>
+            <colorrole role="Text">
+             <brush brushstyle="SolidPattern">
+              <color alpha="255">
+               <red>17</red>
+               <green>202</green>
+               <blue>0</blue>
+              </color>
+             </brush>
+            </colorrole>
+            <colorrole role="Base">
+             <brush brushstyle="SolidPattern">
+              <color alpha="255">
+               <red>0</red>
+               <green>0</green>
+               <blue>0</blue>
+              </color>
+             </brush>
+            </colorrole>
+           </active>
+           <inactive>
+            <colorrole role="Text">
+             <brush brushstyle="SolidPattern">
+              <color alpha="255">
+               <red>17</red>
+               <green>202</green>
+               <blue>0</blue>
+              </color>
+             </brush>
+            </colorrole>
+            <colorrole role="Base">
+             <brush brushstyle="SolidPattern">
+              <color alpha="255">
+               <red>0</red>
+               <green>0</green>
+               <blue>0</blue>
+              </color>
+             </brush>
+            </colorrole>
+           </inactive>
+           <disabled>
+            <colorrole role="Text">
+             <brush brushstyle="SolidPattern">
+              <color alpha="255">
+               <red>127</red>
+               <green>127</green>
+               <blue>127</blue>
+              </color>
+             </brush>
+            </colorrole>
+            <colorrole role="Base">
+             <brush brushstyle="SolidPattern">
+              <color alpha="255">
+               <red>237</red>
+               <green>237</green>
+               <blue>237</blue>
+              </color>
+             </brush>
+            </colorrole>
+           </disabled>
+          </palette>
+         </property>
+         <property name="autoFillBackground">
+          <bool>true</bool>
+         </property>
+         <property name="tabChangesFocus">
+          <bool>false</bool>
+         </property>
+         <property name="lineWrapMode">
+          <enum>QPlainTextEdit::NoWrap</enum>
+         </property>
+         <property name="readOnly">
+          <bool>true</bool>
+         </property>
+         <property name="backgroundVisible">
+          <bool>false</bool>
+         </property>
+         <property name="centerOnScroll">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout">
+         <item>
+          <spacer name="horizontalSpacer">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pushButton">
+           <property name="text">
+            <string>  Apply  </string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pushButton_2">
+           <property name="text">
+            <string>  Quit  </string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources/>
+ <connections/>
+</ui>

@@ -1,0 +1,236 @@
+#include "tabwindowtest.h"
+#include "ui_tabwindowtest.h"
+
+Widget *widg[MAX_NUM_OF_TABS];
+
+Puddin::Puddin(QWidget *parent) :
+    QDialog(parent),
+    ui(new Ui::Puddin)
+{
+    ui->setupUi(this);
+    error = false;
+
+    ui->plainTextEdit->insertPlainText("Puddin'.\n\n\n");
+
+    //create an instance of the file system model for the left tree view
+    /*
+    _qfilesysmod_1 = new QFileSystemModel(this);
+    _qfilesysmod_1->setRootPath("/");
+    _qfilesysmod_1->setFilter(QDir::NoDotAndDotDot | QDir::AllDirs);
+    */
+    //ConfigMainModel(_qfilesysmod_1);
+    ui->treeView->setModel(_qfilesysmod_1);
+
+    //create the first instance of the project tab widget
+    widg[0] = new Widget(this);
+    QString tabName;
+    tabName = "Project 1";
+    ui->tabWidget->addTab(widg[0], tabName);
+
+}
+
+Puddin::~Puddin()
+{
+    delete ui;
+}
+
+void Puddin::on_treeView_clicked(const QModelIndex &index)
+{
+    //grab the index of the currently highlighted tree item
+    dirPathIndex = index;
+    clickName = _qfilesysmod_1->filePath(dirPathIndex);
+    consoleText = "\nCurrent path to get from: " + clickName;
+    ui->plainTextEdit->insertPlainText(consoleText);
+}
+
+void Puddin::on_pushButton_clicked()
+{
+    qDebug() << "--------------------- NEW SEARCH ---------------------------";
+    //QStringList listOfMatchesFINAL;
+
+    qDebug() << dirPathIndex;
+    //print the string list model of each widget (test debug)
+    for (int i = 0; i < ui->tabWidget->count(); i++) {
+        qDebug() << widg[i]->_qstringlistmod->stringList();
+    }
+
+    //set the destination path to the path at the currently selected index
+    QString desPath = _qfilesysmod_1->filePath(dirPathIndex);
+
+    if (!_qfilesysmod_1->isDir(dirPathIndex)) {
+        consoleText = "\nERROR: selected pull-from path is not a directory.";
+        ui->plainTextEdit->insertPlainText(consoleText);
+    } else {
+        //QDirIterator folder(desPath, QDirIterator::Subdirectories);
+        qDebug() << _qfilesysmod_1->filePath(dirPathIndex);
+
+        //for each of the widget tabs...
+        for (int i = 0; i < ui->tabWidget->count(); i++) {
+            //create list for matching files in students dir
+            //and create subdirectory paths (each file)...
+            QStringList listOfMatches;
+            QStringList listOfMatchesFINAL;
+            QDirIterator folder(desPath, QDirIterator::Subdirectories);
+
+            //print the current project number
+            consoleText = "\nProject " + QString::number(i) + ":";
+            ui->plainTextEdit->insertPlainText(consoleText);
+
+            //skip any projects that have no string list specified
+            if (!widg[i]->_qstringlistmod->stringList().count()) {
+                consoleText = "No list of files given. Skipping to next project...\n";
+                ui->plainTextEdit->insertPlainText(consoleText);
+                continue;
+            }
+
+            consoleText = "\nList to search: ";
+            foreach(QString file, widg[i]->_qstringlistmod->stringList()) {
+                consoleText += "\n" + file ;
+            }
+            ui->plainTextEdit->insertPlainText(consoleText);
+
+            foreach(QString string, widg[i]->_qstringlistmod->stringList()) {
+                if (string == "") {
+                    consoleText = "\nERROR: entered at least one empty string as file name";
+                    ui->plainTextEdit->insertPlainText(consoleText);
+                    return;
+                }
+            }
+
+            //while we have more files in students dir...
+            while(folder.hasNext()) {
+                qDebug() << "Going to next file to search: " << folder.next();
+
+                //assign the current file being checked in dir to a string
+                //and assign the list of files to search for from the widg
+                QString ftosearchin;
+                ftosearchin = folder.fileName();
+                QStringList listToSearch;
+                listToSearch = widg[i]->_qstringlistmod->stringList();
+
+                qDebug() << "List to search: " << listToSearch;
+                //Look for the file name specified in the line edit entered by Greg
+                foreach(QString ftosearch, listToSearch) {
+                    if(ftosearchin.contains(ftosearch)) {
+                        qDebug() << "Found when comparing " << ftosearchin << " and " << ftosearch;
+                        consoleText = "\nMatch found when comparing " + ftosearchin + " and " + ftosearch;
+                        ui->plainTextEdit->insertPlainText(consoleText);
+                        listOfMatches << ftosearchin;
+                    }
+                }
+            }
+
+            //As long as the list of matches exists at all...
+            if (!listOfMatches.empty()) {
+
+                //... sort the list of matches ascendingly
+                qDebug() << "Unsorted list: " << listOfMatches;
+                //find out which file is the latest based on enumeration
+                listOfMatches.sort(Qt::CaseInsensitive);
+                qDebug() << "Sorted list: " << listOfMatches;
+
+                //for each string in the list of desired strings,
+                //grab the last one in the list of matches (since the
+                //sort put them in ascending order) and put it in a
+                //final string list
+                QStringList listOfDesired;
+                listOfDesired = widg[i]->_qstringlistmod->stringList();
+                foreach(QString desired, listOfDesired) {
+                    for (int latest = listOfMatches.count() - 1; latest >=0; latest--){
+                        if(listOfMatches[latest].contains(desired)) {
+                            listOfMatchesFINAL << listOfMatches[latest];
+                            break;
+                        }
+                    }
+                }
+            } else {
+                consoleText = "\nERROR: Failed to find any matching files.";
+                ui->plainTextEdit->insertPlainText(consoleText);
+                error = true;
+                break;
+            }
+
+            //Look into whether or not any one of the desired files was
+            //not found. If any not found, terminate.
+            if (!(listOfMatchesFINAL.size() == widg[i]->_qstringlistmod->stringList().size())) {
+                consoleText = "\nFile not found in student directory (check manually)";
+                ui->plainTextEdit->insertPlainText(consoleText);
+                error = true;
+                break;
+            }
+
+            qDebug() << "Final list of latest submitted files: " << listOfMatchesFINAL;
+            consoleText = "\nLatest submitted files: ";
+            foreach(QString file, listOfMatchesFINAL) {
+                consoleText += file + ", ";
+            }
+            ui->plainTextEdit->insertPlainText(consoleText);
+
+            /*************************************************************************/
+
+            //check to make sure that we're actually copying into a directory
+            if (!(widg[i]->_qfilesysmod->isDir(widg[i]->curPresItemIndex))) {
+                consoleText = "\nERROR: item selected in project tab window is not a directory";
+                ui->plainTextEdit->insertPlainText(consoleText);
+                break;
+            }
+
+            //copy the files
+            foreach(QString fileName, listOfMatchesFINAL) {
+                QString filePathFrom;
+                QString filePathTo;
+                filePathFrom = desPath + "/" + fileName;
+                //filePathTo = widg[i]->_qfilesysmod->filePath(widg[i]->curPresItemIndex) + "/" ;
+
+                if (widg[i]->enumRemove) {
+                    foreach(QString fileName2, widg[i]->_qstringlistmod->stringList()) {
+                        if(fileName.contains(fileName2)) {
+                            filePathTo = widg[i]->_qfilesysmod->filePath(widg[i]->curPresItemIndex) + "/" + fileName2;
+                            QFile::remove(filePathTo);
+                        }
+                    }
+                } else {
+                    filePathTo = widg[i]->_qfilesysmod->filePath(widg[i]->curPresItemIndex) + "/" + fileName;
+                }
+
+                QFile::copy(filePathFrom, filePathTo);
+            }
+
+            consoleText = "SUCCESS for project " + QString::number(i);
+            ui->plainTextEdit->insertPlainText(consoleText);
+        }
+    }
+}
+
+void Puddin::ConfigMainModel(QFileSystemModel *_fsm)
+{
+    _fsm = new QFileSystemModel(this);
+    _fsm->setRootPath("/");
+    _fsm->setFilter(QDir::NoDotAndDotDot | QDir::AllDirs);
+}
+
+void Puddin::on_spinBox_valueChanged(int arg1)
+{
+    //remove all currently existing tabs
+    while(ui->tabWidget->currentIndex() > -1) {
+        ui->tabWidget->removeTab(ui->tabWidget->currentIndex());
+    }
+
+    //create all new tabs with new widgets
+    for(int i = 0; i < arg1; i++) {
+        widg[i] = new Widget;
+        QString string;
+        string = "Project " + QString::number(i + 1);
+        ui->tabWidget->addTab(widg[i], string);
+    }
+}
+
+void Puddin::on_pushButton_2_clicked()
+{
+    Puddin::close();
+}
+
+void Puddin::on_plainTextEdit_textChanged()
+{
+    ui->plainTextEdit->moveCursor(QTextCursor::End);
+}
